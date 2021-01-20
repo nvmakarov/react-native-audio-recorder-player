@@ -24,6 +24,7 @@ NSString* GetDirectoryOfType_Sound(NSSearchPathDirectory dir) {
   BOOL _meteringEnabled;
 }
 double subscriptionDuration = 0.1;
+float playingSpeed = 1;
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
   NSLog(@"audioPlayerDidFinishPlaying");
@@ -241,6 +242,21 @@ RCT_EXPORT_METHOD(setVolume:(double) volume
     resolve(@"setVolume");
 }
 
+RCT_EXPORT_METHOD(setSpeed:(float) speed
+                  resolve:(RCTPromiseResolveBlock) resolve
+                  reject:(RCTPromiseRejectBlock) reject) {
+    playingSpeed = speed;
+    [audioPlayer setEnableRate: YES];
+    [audioPlayer setRate: speed];
+    resolve(@"setSpeed");
+}
+
+RCT_EXPORT_METHOD(setPitch:(float) pitch
+                  resolve:(RCTPromiseResolveBlock) resolve
+                  reject:(RCTPromiseRejectBlock) reject) {
+    resolve(@"not implemented");
+}
+
 RCT_EXPORT_METHOD(startPlayer:(NSString*)path
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
@@ -296,6 +312,8 @@ RCT_EXPORT_METHOD(startPlayer:(NSString*)path
             error: nil];
 
         NSLog(@"Error %@",error);
+        [audioPlayer setEnableRate: YES];
+        [audioPlayer setRate: speed];
         [audioPlayer play];
         [self startPlayerTimer];
 

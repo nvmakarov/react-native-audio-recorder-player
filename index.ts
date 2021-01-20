@@ -279,7 +279,7 @@ class AudioRecorderPlayer {
 
   /**
    * set volume.
-   * @param {number} setVolume set volume.
+   * @param {number} volume set volume.
    * @returns {Promise<string>}
    */
   setVolume = async (volume: number): Promise<string> => {
@@ -294,9 +294,27 @@ class AudioRecorderPlayer {
    * @param {number} sec subscription callback duration in seconds.
    * @returns {Promise<string>}
    */
-  setSubscriptionDuration = async (sec: number): Promise<string> => {
+  setSubscriptionDuration = (sec: number): Promise<string> => {
     return RNAudioRecorderPlayer.setSubscriptionDuration(sec);
   };
+
+  /**
+   * set speed.
+   * @param {number} speed sets speed.
+   * @returns {Promise<string>}
+   */
+  setSpeed = (speed: number): Promise<string> => {
+    return RNAudioRecorderPlayer.setSpeed(speed);
+  };
+
+  /**
+   * set pitch.
+   * @param {number} pitch sets pitch.
+   * @returns {Promise<string>}
+   */
+  setPitch = (pitch: number): Promise<string> => {
+    return RNAudioRecorderPlayer.setPitch(pitch);
+  }
 }
 
 export default AudioRecorderPlayer;

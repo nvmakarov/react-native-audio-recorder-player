@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.6.4'
     }
 }
 
@@ -45,6 +45,7 @@ repositories {
 }
 
 dependencies {
+  //noinspection GradleDynamicVersion
   implementation 'com.facebook.react:react-native:+'
     apply plugin: 'eclipse-wtp'
     def supportLibVersion = safeExtGet('supportLibVersion', safeExtGet('supportVersion', null))

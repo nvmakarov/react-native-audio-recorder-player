@@ -8,10 +8,12 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -46,6 +48,8 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
   private String audioFileURL = "";
 
   private int subsDurationMillis = 100;
+  private float speed = 1f;
+  private float pitch = 1f;
   private boolean _meteringEnabled = false;
 
   private final ReactApplicationContext reactContext;
@@ -227,6 +231,14 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
         @Override
         public void onPrepared(final MediaPlayer mp) {
           Log.d(TAG, "mediaplayer prepared and start");
+
+          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            PlaybackParams playbackParams = new PlaybackParams();
+            playbackParams.setSpeed(speed);
+            playbackParams.setPitch(pitch);
+            mp.setPlaybackParams(playbackParams);
+          }
+
           mp.start();
 
           /**
@@ -367,6 +379,30 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
   public void setSubscriptionDuration(double sec, Promise promise) {
     this.subsDurationMillis = (int) (sec * 1000);
     promise.resolve("setSubscriptionDuration: " + this.subsDurationMillis);
+  }
+
+  @TargetApi(Build.VERSION_CODES.M)
+  @ReactMethod
+  public void setSpeed(float speed, Promise promise) {
+    this.speed = speed;
+    if (mediaPlayer != null) {
+      mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(speed));
+      promise.resolve("setSpeed: " + this.speed);
+    } else {
+      promise.reject("setSpeed", "media player is null");
+    }
+  }
+
+  @TargetApi(Build.VERSION_CODES.M)
+  @ReactMethod
+  public void setPitch(float pitch, Promise promise) {
+    this.pitch = pitch;
+    if (mediaPlayer != null) {
+      mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setPitch(pitch));
+      promise.resolve("setPitch: " + this.pitch);
+    } else {
+      promise.reject("setPitch", "media player is null");
+    }
   }
 
   @Override
