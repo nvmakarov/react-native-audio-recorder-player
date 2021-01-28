@@ -313,7 +313,7 @@ RCT_EXPORT_METHOD(startPlayer:(NSString*)path
 
         NSLog(@"Error %@",error);
         [audioPlayer setEnableRate: YES];
-        [audioPlayer setRate: speed];
+        [audioPlayer setRate: playingSpeed];
         [audioPlayer play];
         [self startPlayerTimer];
 
