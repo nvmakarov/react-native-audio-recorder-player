@@ -228,8 +228,19 @@ RCT_EXPORT_METHOD(stopRecorder:(RCTPromiseResolveBlock)resolve
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
 
+        NSMutableDictionary* result = [NSMutableDictionary dictionary];
+        NSError *attributesError = nil;
+
         NSString *filePath = audioFileURL.absoluteString;
-        resolve(filePath);
+        NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[filePath stringByReplacingOccurrencesOfString:@"file://" withString:@""] error:&attributesError];
+        if (!attributesError) {
+            [result setValue:[fileAttributes fileSize] forKey:@"size"];
+        } else {
+            NSLog(@"%@", attributesError);
+        }
+        
+        [result setValue: filePath forKey: @"uri"];
+        resolve(result);
     } else {
         reject(@"audioRecorder record", @"audioRecorder is not set", nil);
     }

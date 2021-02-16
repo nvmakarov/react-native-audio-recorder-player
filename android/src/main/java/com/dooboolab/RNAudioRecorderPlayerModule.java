@@ -34,6 +34,7 @@ import com.facebook.react.modules.core.PermissionListener;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -174,11 +175,18 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
     } catch(RuntimeException stopException) {
       Log.d(TAG, stopException.getMessage());
     }
-
     mediaRecorder.release();
     mediaRecorder = null;
 
-    promise.resolve("file:///" + audioFileURL);
+    File file = new File(audioFileURL);
+    long size = file.length();
+
+    WritableMap map = Arguments.createMap();
+
+    map.putDouble("size", size);
+    map.putString("uri", "file:///" + audioFileURL);
+
+    promise.resolve(map);
   }
 
   @ReactMethod

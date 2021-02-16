@@ -85,6 +85,11 @@ export enum AVEncoderAudioQualityIOSType {
   max = 127,
 }
 
+export type TStopRecorderResult = {
+  uri: string,
+  size: number,
+};
+
 export interface AudioSet {
   AVSampleRateKeyIOS?: number;
   AVFormatIDKeyIOS?: AVEncodingType;
@@ -210,9 +215,9 @@ class AudioRecorderPlayer {
 
   /**
    * stop recording.
-   * @returns {Promise<string>}
+   * @returns {Promise<TStopRecorderResult | string>}
    */
-  stopRecorder = async (): Promise<string> => {
+  stopRecorder = async (): Promise<TStopRecorderResult | string> => {
     if (this._isRecording) {
       this._isRecording = false;
 
