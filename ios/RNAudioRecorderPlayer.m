@@ -233,12 +233,13 @@ RCT_EXPORT_METHOD(stopRecorder:(RCTPromiseResolveBlock)resolve
 
         NSString *filePath = audioFileURL.absoluteString;
         NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[filePath stringByReplacingOccurrencesOfString:@"file://" withString:@""] error:&attributesError];
+        unsigned long long fileSize = [fileAttributes fileSize];
         if (!attributesError) {
-            [result setValue:[fileAttributes fileSize] forKey:@"size"];
+            [result setValue:@(fileSize) forKey:@"size"];
         } else {
             NSLog(@"%@", attributesError);
         }
-        
+
         [result setValue: filePath forKey: @"uri"];
         resolve(result);
     } else {
